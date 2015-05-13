@@ -45,14 +45,14 @@
                 android:inputType="date"
                 android:ems="10"
                 android:id="@+id/txtDateFilter"
-                android:hint="@string/hintFecha" />
+                android:hint="@string/hintFecha"
+                android:layout_weight="1" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="56dp"
                 android:layout_height="wrap_content"
-                android:text="..."
                 android:id="@+id/btnPickDate"
-                android:layout_gravity="right" />
+                android:drawableStart="@android:drawable/ic_menu_my_calendar" />
         </LinearLayout>
 
         <Button
