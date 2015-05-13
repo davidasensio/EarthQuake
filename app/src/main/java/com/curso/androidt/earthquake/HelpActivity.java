@@ -1,24 +1,41 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
-public class SearchActivity extends Activity {
+public class HelpActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_help);
+
+        final String helpDescription = getString(R.string.help_description);
+        TextView txtHelpDescription = (TextView)findViewById(R.id.txtHelpDescription);
+        txtHelpDescription.setText(Html.fromHtml(helpDescription));
+
+        Button btnHelpBack = (Button)findViewById(R.id.btnHelpBack);
+        btnHelpBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_help, menu);
         return true;
     }
 
@@ -32,9 +49,6 @@ public class SearchActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if (id == R.id.action_help) {
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
