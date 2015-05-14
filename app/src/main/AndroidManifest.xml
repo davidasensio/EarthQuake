@@ -20,6 +20,14 @@
             android:name=".HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
+        <activity
+            android:name=".ListQuakeActivity"
+            android:label="@string/title_activity_list_quake" >
+        </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_activity_detail" >
+        </activity>
     </application>
 
 </manifest>

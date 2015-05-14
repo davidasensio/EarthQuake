@@ -29,4 +29,9 @@
         <item>7 - Desastroso</item>
         <item>8 - Catastrófico</item>
     </array>
+    <string name="title_activity_list_quake">ListQuakeActivity</string>
+    <string name="action_detail" >Detail</string>
+    <string name="action_map">View on Map</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="quake_detail_header"><h1>Quake details</h1></string>
 </resources>

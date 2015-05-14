@@ -1,31 +1,23 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-/**
- * Url EarthQuakes: http://earthquake.usgs.gov/
- * Rss all_past_hour: http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom
- */
-public class SearchActivity extends Activity {
+
+public class DetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-
-        init();
+        setContentView(R.layout.activity_detail);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
 
@@ -39,21 +31,8 @@ public class SearchActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if (id == R.id.action_help) {
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void init() {
-        ((Button)findViewById(R.id.btnSearch)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, ListQuakeActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
