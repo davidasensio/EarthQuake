@@ -33,29 +33,29 @@
     </array>
 
     <!-- RSS Feed Earthquakes URLs-->
-    <string name="hour_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_hour.atom</string>
-    <string name="hour_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.atom</string>
-    <string name="hour_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.atom</string>
-    <string name="hour_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.atom</string>
-    <string name="hour_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom</string>
+    <string name="hour_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_hour.atom</string>
+    <string name="hour_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.atom</string>
+    <string name="hour_2.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.atom</string>
+    <string name="hour_1.0" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.atom</string>
+    <string name="hour_all" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom</string>
 
-    <string name="day_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom</string>
-    <string name="day_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.atom</string>
-    <string name="day_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.atom</string>
-    <string name="day_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.atom</string>
-    <string name="day_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.atom</string>
+    <string name="day_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom</string>
+    <string name="day_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.atom</string>
+    <string name="day_2.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.atom</string>
+    <string name="day_1.0" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.atom</string>
+    <string name="day_all" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.atom</string>
 
-    <string name="week_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.atom</string>
-    <string name="week_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.atom</string>
-    <string name="week_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom</string>
-    <string name="week_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.atom</string>
-    <string name="week_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom</string>
+    <string name="week_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.atom</string>
+    <string name="week_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.atom</string>
+    <string name="week_2.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom</string>
+    <string name="week_1.0" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.atom</string>
+    <string name="week_all" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom</string>
 
-    <string name="month_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom</string>
-    <string name="month_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.atom</string>
-    <string name="month_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.atom</string>
-    <string name="month_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.atom</string>
-    <string name="month_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.atom</string>
+    <string name="month_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom</string>
+    <string name="month_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.atom</string>
+    <string name="month_2.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.atom</string>
+    <string name="month_1.0" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.atom</string>
+    <string name="month_all" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.atom</string>
 
 
 </resources>

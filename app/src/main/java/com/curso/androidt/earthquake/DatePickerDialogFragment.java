@@ -12,6 +12,9 @@ import java.util.Calendar;
  * Created by davasens on 5/17/2015.
  */
 public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    //DatePickerDialog.OnDateSetListener onDateSetListener;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Calendar calendar = Calendar.getInstance();
@@ -23,6 +26,8 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         return datePickerDialog;
     }
+
+    //onDa
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

@@ -15,6 +15,7 @@ public class Quake implements Serializable {
     private Date date;
     private Float longitude;
     private Float latitude;
+    private Long elevation;
 
     public Quake() {
     }
@@ -84,6 +85,14 @@ public class Quake implements Serializable {
 
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
+    }
+
+    public Long getElevation() {
+        return elevation;
+    }
+
+    public void setElevation(Long elevation) {
+        this.elevation = elevation;
     }
 
     @Override

@@ -132,6 +132,7 @@ public class SearchActivity extends Activity {
         });
     }
 
+    /*
     public static class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
 
@@ -152,4 +153,5 @@ public class SearchActivity extends Activity {
             ((SearchActivity)getActivity()).setTxtDate(year, monthOfYear, dayOfMonth);
         }
     }
+    */
 }

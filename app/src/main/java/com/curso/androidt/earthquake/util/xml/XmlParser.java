@@ -1,5 +1,6 @@
 package com.curso.androidt.earthquake.util.xml;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.curso.androidt.earthquake.Quake;
@@ -21,6 +22,8 @@ import java.util.regex.Pattern;
  * Created by davasens on 5/16/2015.
  */
 public class XmlParser {
+
+    private final String LOG_TAG = XmlParser.class.getName();
 
     private String ns = null;
     private String feedTagName = null;
@@ -57,7 +60,7 @@ public class XmlParser {
     public List readFeed(XmlPullParser parser) throws IOException, XmlPullParserException {
         List entries = new ArrayList();
 
-        parser.require(XmlPullParser.START_TAG,ns,"feed");
+        parser.require(XmlPullParser.START_TAG, ns, "feed");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -90,7 +93,7 @@ public class XmlParser {
     }
 
     private Quake readEntry(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,ns, getEntryTagName());
+        parser.require(XmlPullParser.START_TAG, ns, getEntryTagName());
         Quake quake = new Quake();
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -104,11 +107,11 @@ public class XmlParser {
                     quake.setId(Long.valueOf(m.group()));
 
                 }
-            }else if (parser.getName().equals("title")) {
+            } else if (parser.getName().equals("title")) {
                 quake.setTitle(readTag(parser, "title"));
-            }else if (parser.getName().equals("link")) {
+            } else if (parser.getName().equals("link")) {
                 quake.setLink(readTag(parser, "link"));
-            }else if (parser.getName().equals("updated")) {
+            } else if (parser.getName().equals("updated")) {
                 try {
                     String strDate = readTag(parser, "updated");
                     Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(strDate);
@@ -116,10 +119,31 @@ public class XmlParser {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            }
-            else if (parser.getName().equals("point")) {
-                quake.setLink(readTag(parser, "point"));
-            }else {
+            } else if (parser.getName().equals("georss:point")) {
+                String point = readTag(parser, "georss:point");
+                if (point != null) {
+                    try {
+                        float latitude = Float.valueOf(point.split(" ")[0]);
+                        float longitude = Float.valueOf(point.split(" ")[1]);
+
+                        quake.setLatitude(latitude);
+                        quake.setLongitude(longitude);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(LOG_TAG, point);
+                }
+            } else if (parser.getName().equals("georss:elev")) {
+                String elev = readTag(parser, "georss:elev");
+
+                try {
+                    Long elevation = Long.valueOf(elev);
+                    quake.setElevation(elevation);
+                    Log.d(LOG_TAG, elev);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }  else {
                 skip(parser);
             }
         }
@@ -127,7 +151,7 @@ public class XmlParser {
     }
 
     private String readTag(XmlPullParser parser, String tagName) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,ns, tagName);
+        parser.require(XmlPullParser.START_TAG, ns, tagName);
         String value = "";
         if (parser.next() == XmlPullParser.TEXT) {
             value = parser.getText();
