@@ -8,30 +8,54 @@
     <string name="help_description">"<![CDATA[<h1>Earth Quake App</h1>Esta aplicación permite buscar terremotos ocurridos en todo el mundo filtrando por magnitud y fecha del terremoto.<br/><br/>Año de creación: 2015<br/>Autor: David A]]></string>
     <string name="hintFecha">Seleccione una fecha</string>
 
-    <!-- Magnitud Richter -->
-    <array name="righter_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </array>
-    <array name="righter_description">
-        <item>1 - Imperceptible</item>
-        <item>2 - Casi imperceptible</item>
-        <item>3 - Suave</item>
-        <item>4 - Moderado</item>
-        <item>5 - Fuerte</item>
-        <item>6 - Destructivo</item>
-        <item>7 - Desastroso</item>
-        <item>8 - Catastrófico</item>
-    </array>
     <string name="title_activity_list_quake">ListQuakeActivity</string>
     <string name="action_detail" >Detail</string>
     <string name="action_map">View on Map</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="quake_detail_header"><h1>Quake details</h1></string>
+
+
+    <!-- Magnitud Richter -->
+    <array name="righter_values">
+        <item>significant</item>
+        <item>4.5</item>
+        <item>2.5</item>
+        <item>1.0</item>
+        <item>all</item>
+    </array>
+
+    <array name="righter_description">
+        <item>Significant</item>
+        <item>Magnitude 4.5+</item>
+        <item>Magnitude 2.5+</item>
+        <item>Magnitude 1.0+</item>
+        <item>All Earthquakes</item>
+    </array>
+
+    <!-- RSS Feed Earthquakes URLs-->
+    <string name="hour_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_hour.atom</string>
+    <string name="hour_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.atom</string>
+    <string name="hour_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.atom</string>
+    <string name="hour_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_hour.atom</string>
+    <string name="hour_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom</string>
+
+    <string name="day_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_day.atom</string>
+    <string name="day_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.atom</string>
+    <string name="day_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.atom</string>
+    <string name="day_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.atom</string>
+    <string name="day_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.atom</string>
+
+    <string name="week_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.atom</string>
+    <string name="week_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.atom</string>
+    <string name="week_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom</string>
+    <string name="week_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.atom</string>
+    <string name="week_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom</string>
+
+    <string name="month_significant">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom</string>
+    <string name="month_4.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.atom</string>
+    <string name="month_2.5">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.atom</string>
+    <string name="month_1.0">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.atom</string>
+    <string name="month_all">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.atom</string>
+
+
 </resources>
