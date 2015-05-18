@@ -56,8 +56,12 @@ public class QuakeAdapter extends BaseAdapter {
 
         txtTitle.setText(quake.getTitle());
         txtDescription.setText((quake.getLink()));
-        txtMagnitude.setText(String.valueOf(quake.getMagnitude()));
-        txtDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(quake.getDate()));
+        if (txtMagnitude != null) {
+            txtMagnitude.setText(String.valueOf(quake.getMagnitude()));
+        }
+        if (quake.getDate() != null) {
+            txtDate.setText(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss   ").format(quake.getDate()));
+        }
 
         return convertView;
     }

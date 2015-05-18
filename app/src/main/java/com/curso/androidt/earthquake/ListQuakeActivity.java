@@ -1,7 +1,9 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,12 +12,24 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.util.Date;
-import java.util.LinkedList;
+import com.curso.androidt.earthquake.util.xml.XmlParser;
+import com.curso.androidt.earthquake.util.xml.XmlReader;
+
+import java.io.InputStream;
+import java.util.List;
 
 
 public class ListQuakeActivity extends Activity {
-    ListView listViewQuakes;
+
+    private static final String LOG_TAG = ListQuakeActivity.class.getName();
+
+    private static final String URL_EARTH_QUAKES_ALL_HOUR = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom";
+    private static final String URL_EARTH_QUAKES_ALL_DAY = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.atom";
+    private static final String URL_EARTH_QUAKES_M4_HOUR = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/m4_day.atom";
+
+    private ListView listViewQuakes;
+    private boolean useUrl = true;
+    private XmlParser xmlParser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +37,6 @@ public class ListQuakeActivity extends Activity {
         setContentView(R.layout.activity_list_quake);
 
         init();
-
-
-
-
     }
 
     @Override
@@ -80,24 +90,55 @@ public class ListQuakeActivity extends Activity {
         return super.onContextItemSelected(item);
     }
 
-    private void init() {
-
-
-        LinkedList<Quake> listQuakes = new LinkedList<>();
-        //dummy data
-        listQuakes.add(new Quake("Quake 1", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
-        listQuakes.add(new Quake("Quake 2", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
-        listQuakes.add(new Quake("Quake 3", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
-        listQuakes.add(new Quake("Quake 4", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
-
+    private void init()  {
         listViewQuakes = (ListView) findViewById(R.id.listViewQuakes);
-        ListAdapter quakeAdapter = new QuakeAdapter(listQuakes, R.layout.quake_list_item, this);
-        listViewQuakes.setAdapter(quakeAdapter);
+        xmlParser = new XmlParser("feed", "entry");
+
+        if (!useUrl) {
+            //dummy data
+            //listQuakes.add(new Quake("Quake 1", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
+            //listQuakes.add(new Quake("Quake 2", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
+            //listQuakes.add(new Quake("Quake 3", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
+            //listQuakes.add(new Quake("Quake 4", "http://earthquake.usgs.gov/earthquakes/eventpage/nn00494300#general_map", 3.5f, new Date(), 0f,0f));
+
+            List<Quake> listQuakes = getListQuakesFromAssets();
+            setQuakeAdapter(listQuakes);
+        } else {
+            //Do it async
+            new DownloadXmlTask().execute(URL_EARTH_QUAKES_ALL_HOUR);
+        }
 
         //Register context menu
         registerForContextMenu(listViewQuakes);
-
     }
 
+    private void setQuakeAdapter(List<Quake> listQuakes) {
+        ListAdapter quakeAdapter = new QuakeAdapter(listQuakes, R.layout.quake_list_item, this);
+        listViewQuakes.setAdapter(quakeAdapter);
+    }
 
+    public List<Quake> getListQuakesFromAssets() {
+        InputStream is = XmlReader.getFeedInputStreamFromAssets(this, "sample.xml");
+        List<Quake> listQuakes = xmlParser.parse(is);
+        Log.w(LOG_TAG, listQuakes.toString());
+        return listQuakes;
+    }
+
+    public class DownloadXmlTask extends AsyncTask<String, Void, InputStream> {
+
+        @Override
+        protected InputStream doInBackground(String... urls) {
+
+            return XmlReader.getFeedInputStreamFromUrl(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(InputStream inputStream) {
+            super.onPostExecute(inputStream);
+
+            List<Quake> listQuakes = xmlParser.parse(inputStream);
+            Log.w(LOG_TAG, listQuakes.toString());
+            setQuakeAdapter(listQuakes);
+        }
+    }
 }

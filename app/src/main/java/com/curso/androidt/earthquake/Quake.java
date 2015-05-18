@@ -85,4 +85,10 @@ public class Quake implements Serializable {
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        return result.append(String.valueOf(id)).append(" - ").append(title).append(" - ").append(String.valueOf(magnitude)).append(" - ").append(link).toString();
+    }
 }
