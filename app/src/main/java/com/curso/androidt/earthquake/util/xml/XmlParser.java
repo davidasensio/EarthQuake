@@ -143,7 +143,18 @@ public class XmlParser {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }  else {
+            } else if (parser.getName().equals("category")) {
+                for (int i = 0;i<parser.getAttributeCount();i++) {
+                    String attName = parser.getAttributeName(i);
+                    if ("label".equals(attName) && "Magnitude".equals(parser.getAttributeValue(ns, "term"))) {
+                        Log.d(LOG_TAG,parser.getAttributeValue(1));
+
+                    }
+
+
+                }
+            }
+            else {
                 skip(parser);
             }
         }
