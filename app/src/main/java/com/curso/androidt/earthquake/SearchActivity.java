@@ -2,8 +2,6 @@ package com.curso.androidt.earthquake;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -98,10 +96,14 @@ public class SearchActivity extends Activity {
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Date button pressed");
 
-                DialogFragment dialogFragment = new DatePickerDialogFragment();
-                dialogFragment.show(getFragmentManager(), "datePicker");
-
-
+                DatePickerDialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
+                datePickerDialogFragment.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        setTxtDate(year, monthOfYear, dayOfMonth);
+                    }
+                });
+                datePickerDialogFragment.show(getFragmentManager(), "datePicker");
             }
         });
     }
@@ -132,26 +134,4 @@ public class SearchActivity extends Activity {
         });
     }
 
-    /*
-    public static class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year,month,day);
-            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-            return datePickerDialog;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            ((SearchActivity)getActivity()).setTxtDate(year, monthOfYear, dayOfMonth);
-        }
-    }
-    */
 }
