@@ -54,14 +54,10 @@ public class QuakeAdapter extends BaseAdapter {
         TextView txtMagnitude = (TextView) convertView.findViewById(R.id.txtMagnitude);
         TextView txtDate = (TextView) convertView.findViewById(R.id.txtDate);
 
+        txtMagnitude.setText("M ".concat(String.valueOf(quake.getMagnitude())));
         txtTitle.setText(quake.getTitle());
         txtDescription.setText((quake.getLink()));
-        if (txtMagnitude != null) {
-            txtMagnitude.setText(String.valueOf(quake.getMagnitude()));
-        }
-        if (quake.getDate() != null) {
-            txtDate.setText(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss   ").format(quake.getDate()));
-        }
+        txtDate.setText(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(quake.getDate()));
 
         return convertView;
     }

@@ -1,9 +1,7 @@
-package com.curso.androidt.earthquake.util.xml;
+package com.curso.androidt.earthquake;
 
 import android.util.Log;
 import android.util.Xml;
-
-import com.curso.androidt.earthquake.Quake;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -21,15 +19,15 @@ import java.util.regex.Pattern;
 /**
  * Created by davasens on 5/16/2015.
  */
-public class XmlParser {
+public class XmlQuakeParser {
 
-    private final String LOG_TAG = XmlParser.class.getName();
+    private final String LOG_TAG = XmlQuakeParser.class.getName();
 
     private String ns = null;
     private String feedTagName = null;
     private String entryTagName = null;
 
-    public XmlParser(String feedTagName, String entryTagName) {
+    public XmlQuakeParser(String feedTagName, String entryTagName) {
         this.feedTagName = feedTagName;
         this.entryTagName = entryTagName;
 
@@ -37,8 +35,8 @@ public class XmlParser {
         this.ns = null;
     }
 
-    public List parse(InputStream is) {
-        List result = null;
+    public List<Quake> parse(InputStream is) {
+        List<Quake> result = null;
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -57,8 +55,8 @@ public class XmlParser {
         return result;
     }
 
-    public List readFeed(XmlPullParser parser) throws IOException, XmlPullParserException {
-        List entries = new ArrayList();
+    public List<Quake> readFeed(XmlPullParser parser) throws IOException, XmlPullParserException {
+        List<Quake> entries = new ArrayList();
 
         parser.require(XmlPullParser.START_TAG, ns, "feed");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -108,7 +106,13 @@ public class XmlParser {
 
                 }
             } else if (parser.getName().equals("title")) {
-                quake.setTitle(readTag(parser, "title"));
+                String titleStr = readTag(parser, "title");
+                quake.setTitle(titleStr.split(" - ")[1]);
+                String magnitudeStr =titleStr.split(" - ")[0];
+                Matcher matcherMagnitude = Pattern.compile("\\d\\.\\d+").matcher(magnitudeStr);
+                if (matcherMagnitude.find()) {
+                    quake.setMagnitude(Float.valueOf(matcherMagnitude.group(0)));
+                }
             } else if (parser.getName().equals("link")) {
                 quake.setLink(readTag(parser, "link"));
             } else if (parser.getName().equals("updated")) {
@@ -119,8 +123,8 @@ public class XmlParser {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            } else if (parser.getName().equals("georss:point")) {
-                String point = readTag(parser, "georss:point");
+            } else if (parser.getName().equals("point")) {
+                String point = readTag(parser, "point");
                 if (point != null) {
                     try {
                         float latitude = Float.valueOf(point.split(" ")[0]);

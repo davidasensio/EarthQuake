@@ -98,6 +98,6 @@ public class Quake implements Serializable {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        return result.append(String.valueOf(id)).append(" - ").append(title).append(" - ").append(String.valueOf(magnitude)).append(" - ").append(link).toString();
+        return result.append("M ".concat(String.valueOf(magnitude))).append(" - ").append(title).append(" - ").append(String.valueOf(magnitude)).append(" - ").append(link).toString();
     }
 }

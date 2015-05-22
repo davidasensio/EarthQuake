@@ -1,7 +1,7 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.curso.androidt.earthquake.util.xml.XmlParser;
 import com.curso.androidt.earthquake.util.xml.XmlReader;
 
 import java.io.InputStream;
@@ -28,8 +27,8 @@ public class ListQuakeActivity extends Activity {
     private static final String URL_EARTH_QUAKES_M4_HOUR = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/m4_day.atom";
 
     private ListView listViewQuakes;
-    private boolean useUrl = true;
-    private XmlParser xmlParser = null;
+    private boolean useUrl = false;
+    //private XmlQuakeParser xmlParser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +91,6 @@ public class ListQuakeActivity extends Activity {
 
     private void init()  {
         listViewQuakes = (ListView) findViewById(R.id.listViewQuakes);
-        xmlParser = new XmlParser("feed", "entry");
 
         if (!useUrl) {
             //dummy data
@@ -105,7 +103,8 @@ public class ListQuakeActivity extends Activity {
             setQuakeAdapter(listQuakes);
         } else {
             //Do it async
-            new DownloadXmlTask().execute(URL_EARTH_QUAKES_ALL_HOUR);
+            QuakeDto quakeDto = new QuakeDto();
+            new QuakeSearchAsyncTask(this, listViewQuakes, new ProgressDialog(this)).execute(quakeDto);
         }
 
         //Register context menu
@@ -118,27 +117,11 @@ public class ListQuakeActivity extends Activity {
     }
 
     public List<Quake> getListQuakesFromAssets() {
+        XmlQuakeParser xmlQuakeParser = new XmlQuakeParser("fedd", "entry");
         InputStream is = XmlReader.getFeedInputStreamFromAssets(this, "sample.xml");
-        List<Quake> listQuakes = xmlParser.parse(is);
+        List<Quake> listQuakes = xmlQuakeParser.parse(is);
         Log.w(LOG_TAG, listQuakes.toString());
         return listQuakes;
     }
 
-    public class DownloadXmlTask extends AsyncTask<String, Void, InputStream> {
-
-        @Override
-        protected InputStream doInBackground(String... urls) {
-
-            return XmlReader.getFeedInputStreamFromUrl(urls[0]);
-        }
-
-        @Override
-        protected void onPostExecute(InputStream inputStream) {
-            super.onPostExecute(inputStream);
-
-            List<Quake> listQuakes = xmlParser.parse(inputStream);
-            Log.w(LOG_TAG, listQuakes.toString());
-            setQuakeAdapter(listQuakes);
-        }
-    }
 }
