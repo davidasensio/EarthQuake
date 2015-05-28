@@ -7,14 +7,15 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_popup_reminder"
-            />
+            android:layout_margin="5dp" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -31,18 +32,20 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="90dp"
+                    android:layout_height="36dp"
                     android:text="a"
                     android:id="@+id/txtTitle"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:singleLine="false" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="d"
                     android:id="@+id/txtDate"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal" />
             </LinearLayout>
 
             <LinearLayout
@@ -55,7 +58,9 @@
                     android:layout_height="wrap_content"
                     android:text="c"
                     android:id="@+id/txtMagnitude"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:textColor="#ffa30b03"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"

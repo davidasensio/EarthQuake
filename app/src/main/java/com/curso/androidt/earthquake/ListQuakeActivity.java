@@ -1,7 +1,7 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -12,9 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.curso.androidt.earthquake.dao.QuakeDao;
+import com.curso.androidt.earthquake.dao.QuakeDaoImpl;
+import com.curso.androidt.earthquake.util.CommonUtils;
 import com.curso.androidt.earthquake.util.xml.XmlReader;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,13 +31,40 @@ public class ListQuakeActivity extends Activity {
     private static final String URL_EARTH_QUAKES_M4_HOUR = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/m4_day.atom";
 
     private ListView listViewQuakes;
-    private boolean useUrl = false;
-    //private XmlQuakeParser xmlParser = null;
+    private boolean useUrl = true;
+
+
+    //Filters
+    Float magnitude = 0f;
+    Date date;
+
+    //BBDD
+    QuakeSQLiteOpenHelper helper;
+    SQLiteDatabase db;
+    QuakeDao dao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_quake);
+
+
+
+        date = CommonUtils.getStringToDate(getIntent().getExtras().getString("dateSelected"));
+        String magnitudeStr = getIntent().getExtras().getString("magnitudeSelected");
+        if ("Significant".equals(magnitudeStr)) {
+            magnitude = 5.5f;
+        } else if ("Magnitude 4.5+".equals(magnitudeStr)) {
+            magnitude = 4.5f;
+        } else if ("Magnitude 2.5+".equals(magnitudeStr)) {
+            magnitude = 2.5f;
+        } else if ("Magnitude 1.0+".equals(magnitudeStr)) {
+            magnitude = 1f;
+        }  else if ("All Earthquakes".equals(magnitudeStr)) {
+            magnitude = 0f;
+        }
+
 
         init();
     }
@@ -89,8 +120,32 @@ public class ListQuakeActivity extends Activity {
         return super.onContextItemSelected(item);
     }
 
-    private void init()  {
+    private void init() {
+
         listViewQuakes = (ListView) findViewById(R.id.listViewQuakes);
+
+        helper = new QuakeSQLiteOpenHelper(this, "EarthQuake.s3db", null, getResources().getInteger(R.integer.database_version));
+        db = helper.getWritableDatabase();
+        dao = new QuakeDaoImpl(db);
+
+        //Filter DTO
+        QuakeDto quakeDto = new QuakeDto();
+        quakeDto.setMagnitude(Float.valueOf(magnitude));
+        quakeDto.setDate(date);
+
+        //read from BBDD
+        List<Quake> listQuakes = dao.find(quakeDto);
+
+        setQuakeAdapter(listQuakes);
+
+        //Register context menu
+        registerForContextMenu(listViewQuakes);
+
+    }
+
+    /*
+    private void old_init() {
+    listViewQuakes = (ListView) findViewById(R.id.listViewQuakes);
 
         if (!useUrl) {
             //dummy data
@@ -110,6 +165,7 @@ public class ListQuakeActivity extends Activity {
         //Register context menu
         registerForContextMenu(listViewQuakes);
     }
+    */
 
     private void setQuakeAdapter(List<Quake> listQuakes) {
         ListAdapter quakeAdapter = new QuakeAdapter(listQuakes, R.layout.quake_list_item, this);

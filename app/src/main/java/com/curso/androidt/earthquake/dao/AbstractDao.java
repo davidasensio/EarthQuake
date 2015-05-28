@@ -9,7 +9,7 @@ public interface AbstractDao<K,V> {
 
     K get(V id);
     List<K> findAll();
-    K insert(K entity);
+    void insert(K entity);
     K update(K entity);
-    void delete();
+    void delete(V id);
 }

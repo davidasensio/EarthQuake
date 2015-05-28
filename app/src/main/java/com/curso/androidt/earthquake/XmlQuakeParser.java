@@ -59,7 +59,7 @@ public class XmlQuakeParser {
         List<Quake> entries = new ArrayList();
 
         parser.require(XmlPullParser.START_TAG, ns, "feed");
-        while (parser.next() != XmlPullParser.END_TAG) {
+        while (parser.next() != XmlPullParser.END_DOCUMENT) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
@@ -102,7 +102,7 @@ public class XmlQuakeParser {
                 String strId = readTag(parser, "id");
                 Matcher m = Pattern.compile("\\d+").matcher(strId);
                 if (m.find()) {
-                    quake.setId(Long.valueOf(m.group()));
+                    quake.setId(m.group());
 
                 }
             } else if (parser.getName().equals("title")) {
@@ -123,8 +123,8 @@ public class XmlQuakeParser {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            } else if (parser.getName().equals("point")) {
-                String point = readTag(parser, "point");
+            } else if (parser.getName().equals("georss:point")) {
+                String point = readTag(parser, "georss:point");
                 if (point != null) {
                     try {
                         float latitude = Float.valueOf(point.split(" ")[0]);
@@ -141,22 +141,20 @@ public class XmlQuakeParser {
                 String elev = readTag(parser, "georss:elev");
 
                 try {
-                    Long elevation = Long.valueOf(elev);
+                    Float elevation = Float.valueOf(elev);
                     quake.setElevation(elevation);
                     Log.d(LOG_TAG, elev);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (parser.getName().equals("category")) {
-                for (int i = 0;i<parser.getAttributeCount();i++) {
+                /*for (int i = 0;i<parser.getAttributeCount();i++) {
                     String attName = parser.getAttributeName(i);
                     if ("label".equals(attName) && "Magnitude".equals(parser.getAttributeValue(ns, "term"))) {
                         Log.d(LOG_TAG,parser.getAttributeValue(1));
 
                     }
-
-
-                }
+                }*/
             }
             else {
                 skip(parser);

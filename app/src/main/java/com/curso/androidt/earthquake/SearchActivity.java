@@ -42,6 +42,28 @@ public class SearchActivity extends Activity {
         setContentView(R.layout.activity_search);
 
         init();
+
+        /*
+        QuakeSQLiteOpenHelper helper = new QuakeSQLiteOpenHelper(this, "EarthQuake.s3db", null, getResources().getInteger(R.integer.database_version));
+        SQLiteDatabase db = helper.getWritableDatabase();
+        QuakeDao dao = new QuakeDaoImpl(db);
+
+        db.beginTransaction();
+
+        try {
+            dao.insert(new Quake("1", "Uno","fef", new Date(), 3.5f,0.1f,12.1f));
+            dao.insert(new Quake("2", "Dos","fdf", new Date(), 5.5f,0.1f,10.1f));
+            dao.insert(new Quake("3", "Tres","ffd", new Date(), 2.5f,0.1f,0.1f));
+            dao.insert(new Quake("4", "Cuatro","ffa", new Date(), 3.5f,0.1f,11.1f));
+            dao.insert(new Quake("5", "Cinco","ffa", new Date(), 7.5f,10.1f,101.1f));
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        List<Quake> all = dao.findAll();
+        Log.d(LOG_TAG, "List of quakes: " + all.toString());
+        */
     }
 
     @Override
@@ -76,17 +98,28 @@ public class SearchActivity extends Activity {
         btnPickDate = ((Button)findViewById(R.id.btnPickDate));
         btnSearch = ((Button)findViewById(R.id.btnSearch));
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, ListQuakeActivity.class);
-                startActivity(intent);
-            }
-        });
+        //Button Search
+        setBtnSearchListener();
 
         //Set filters
         setMagnitudeFilterListener();
         setDateFilterListener();
+    }
+
+    private void setBtnSearchListener() {
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String magnitudeSelected = spinnerMagnitude.getSelectedItem().toString();
+                String dateSelected = txtDate.getText().toString();
+
+                Intent intent = new Intent(SearchActivity.this, ListQuakeActivity.class);
+                intent.putExtra("magnitudeSelected", magnitudeSelected);
+                intent.putExtra("dateSelected", dateSelected);
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void setDateFilterListener() {

@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinnerMagnitudFilter"
             android:spinnerMode="dropdown"
-            android:entries="@array/righter_description" />
+            android:entries="@array/righter_description"
+            />
 
         <TextView
             android:layout_width="wrap_content"

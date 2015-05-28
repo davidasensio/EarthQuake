@@ -1,9 +1,15 @@
 package com.curso.androidt.earthquake.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by davasens on 5/22/2015.
  */
 public class CommonUtils {
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Calc distance in Meters between 2 poits
@@ -25,4 +31,30 @@ public class CommonUtils {
 
         return distInMeters;
     }
+
+    /**
+     * Return String text of a Date
+     * @param date
+     * @return
+     */
+    public static String getDateToString(Date date) {
+        return sdf.format(date);
+    }
+
+    /**
+     * Return String text of a Date
+     * @param date
+     * @return
+     */
+    public static Date getStringToDate(String date) {
+        if (date != null) {
+            try {
+                return sdf.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 }

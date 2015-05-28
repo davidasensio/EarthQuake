@@ -8,19 +8,20 @@ import java.util.Date;
  */
 public class Quake implements Serializable {
 
-    private Long id;
+    private String id;
     private String title;
     private String link;
     private Float magnitude;
     private Date date;
     private Float longitude;
     private Float latitude;
-    private Long elevation;
+    private Float elevation;
 
     public Quake() {
     }
 
-    public Quake(String title, String link, Float magnitude, Date date, Float longitude, Float latitude) {
+    public Quake(String id, String title, String link, Date date, Float magnitude, Float longitude, Float latitude) {
+        this.id = id;
         this.title = title;
         this.link = link;
         this.magnitude = magnitude;
@@ -31,11 +32,12 @@ public class Quake implements Serializable {
 
     //Getters & Setters
 
-    public Long getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -87,11 +89,11 @@ public class Quake implements Serializable {
         this.latitude = latitude;
     }
 
-    public Long getElevation() {
+    public Float getElevation() {
         return elevation;
     }
 
-    public void setElevation(Long elevation) {
+    public void setElevation(Float elevation) {
         this.elevation = elevation;
     }
 

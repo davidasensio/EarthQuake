@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -53,11 +54,20 @@ public class QuakeAdapter extends BaseAdapter {
         TextView txtDescription = (TextView) convertView.findViewById(R.id.txtDescription);
         TextView txtMagnitude = (TextView) convertView.findViewById(R.id.txtMagnitude);
         TextView txtDate = (TextView) convertView.findViewById(R.id.txtDate);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
 
         txtMagnitude.setText("M ".concat(String.valueOf(quake.getMagnitude())));
         txtTitle.setText(quake.getTitle());
         txtDescription.setText((quake.getLink()));
-        txtDate.setText(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(quake.getDate()));
+        txtDate.setText(new SimpleDateFormat("dd/MM HH:mm").format(quake.getDate()));
+
+        if (quake.getMagnitude() >= 7) {
+            imageView.setBackground(null); //Red
+        } else if (quake.getMagnitude() >= 4.5) {
+            imageView.setBackground(null); //Yellow
+        } else {
+            imageView.setBackground(null); //Green
+        }
 
         return convertView;
     }

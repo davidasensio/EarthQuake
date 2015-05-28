@@ -7,7 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import com.curso.androidt.earthquake.Quake;
 import com.curso.androidt.earthquake.QuakeDto;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,14 +20,14 @@ import java.util.List;
 public class QuakeDaoImpl implements QuakeDao {
 
     public static final String TABLE = "QUAKE";
-    public static final String FILED_ID = "ID";
-    public static final String FILED_TITLE = "TITLE";
-    public static final String FILED_LINK = "LINK";
-    public static final String FILED_DATE = "DATE";
-    public static final String FILED_MAGNITUDE = "MAGNITUDE";
-    public static final String FILED_LATITUDE = "LATITUDE";
-    public static final String FILED_LONGITUDE = "LONGITUDE";
-    public static final String FILED_ELEVATION = "ELEVATION";
+    public static final String FIELD_ID = "ID";
+    public static final String FIELD_TITLE = "TITLE";
+    public static final String FIELD_LINK = "LINK";
+    public static final String FIELD_DATE = "DATE";
+    public static final String FIELD_MAGNITUDE = "MAGNITUDE";
+    public static final String FIELD_LATITUDE = "LATITUDE";
+    public static final String FIELD_LONGITUDE = "LONGITUDE";
+    public static final String FIELD_ELEVATION = "ELEVATION";
 
     private SQLiteDatabase db;
     private SimpleDateFormat sdf;
@@ -35,68 +39,121 @@ public class QuakeDaoImpl implements QuakeDao {
 
     @Override
     public List<Quake> find(QuakeDto dto) {
+        String where = "";
+        ArrayList whereArgs = new ArrayList();
+        String[] whereArgsArray = null;
 
-        return null;
+        if (dto.getMagnitude() != null ) {
+            where = where.concat(FIELD_MAGNITUDE.concat(">=?"));
+            whereArgs.add(String.valueOf(dto.getMagnitude()));
+        }
+
+        if (dto.getDate() != null) {
+            where = where.concat(FIELD_DATE.concat(">=?"));
+            whereArgs.add(String.valueOf(dto.getDate()));
+        }
+
+        if (whereArgs.size() > 0) {
+            whereArgsArray = new String[whereArgs.size()];
+            whereArgs.toArray(whereArgsArray);
+        }
+
+        Cursor cursor = db.query(TABLE, null, where, whereArgsArray, null, null, null);
+
+        return cursorToListQuake(cursor);
     }
 
     @Override
     public Quake get(String id) {
+        Quake result = null;
 
-        String where = FILED_ID.concat(" = ?");
+        String where = FIELD_ID.concat("=?");
         String[] whereArgs = new String[]{id};
 
         Cursor cursor = db.query(TABLE, null, where, whereArgs, null, null, null);
-        return cursorToQuake(cursor);
+        List<Quake> quakes = cursorToListQuake(cursor);
+        if (quakes != null && quakes.size() > 0) {
+            result = quakes.get(0);
+        }
+        return result;
     }
-
 
 
     @Override
     public List<Quake> findAll() {
-        return null;
+        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
+        return cursorToListQuake(cursor);
     }
 
     @Override
-    public Quake insert(Quake entity) {
-        db.insert(TABLE, null, quakeToContentValues(entity));
-        return null;
+    public void insert(Quake entity) {
+        Quake result = get(entity.getId());
+        if (result == null) {
+            db.insert(TABLE, null, quakeToContentValues(entity));
+        }
     }
 
 
     @Override
     public Quake update(Quake entity) {
-
-        return null;
+        String where = FIELD_ID.concat("=?");
+        String[] whereArgs = new String[]{entity.getId()};
+        db.update(TABLE, quakeToContentValues(entity),where, whereArgs);
+        return get(entity.getId());
     }
 
     @Override
-    public void delete() {
+    public void delete(String id) {
+        String where = FIELD_ID.concat("=?");
+        String[] whereArgs = new String[] {id};
+        db.delete(TABLE, where, whereArgs);
 
     }
 
     private ContentValues quakeToContentValues(Quake entity) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(FILED_ID, entity.getId());
-        contentValues.put(FILED_TITLE, entity.getTitle());
-        contentValues.put(FILED_LINK, entity.getLink());
-        contentValues.put(FILED_DATE, sdf.format(entity.getDate()));
-        contentValues.put(FILED_MAGNITUDE, entity.getMagnitude());
-        contentValues.put(FILED_LATITUDE, entity.getLatitude());
-        contentValues.put(FILED_LONGITUDE, entity.getLongitude());
-        contentValues.put(FILED_ELEVATION, entity.getElevation());
+        contentValues.put(FIELD_ID, entity.getId());
+        contentValues.put(FIELD_TITLE, entity.getTitle());
+        contentValues.put(FIELD_LINK, entity.getLink());
+        if (entity.getDate() != null) {
+            contentValues.put(FIELD_DATE, sdf.format(entity.getDate()));
+        }else {
+            contentValues.putNull(FIELD_DATE);
+        }
+        contentValues.put(FIELD_MAGNITUDE, entity.getMagnitude());
+        contentValues.put(FIELD_LATITUDE, entity.getLatitude());
+        contentValues.put(FIELD_LONGITUDE, entity.getLongitude());
+        contentValues.put(FIELD_ELEVATION, entity.getElevation());
 
         return contentValues;
     }
 
     private List<Quake> cursorToListQuake(Cursor cursor) {
+        LinkedList<Quake> result = new LinkedList<>();
         if (cursor.moveToFirst()) {
             do {
+                Date quakeDate = null;
+                try {
+                    quakeDate = sdf.parse(cursor.getString(cursor.getColumnIndex(FIELD_DATE)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 Quake quake = new Quake(
-
+                        cursor.getString(cursor.getColumnIndex(FIELD_ID))
+                        , cursor.getString(cursor.getColumnIndex(FIELD_TITLE))
+                        , cursor.getString(cursor.getColumnIndex(FIELD_LINK))
+                        , quakeDate
+                        , cursor.getFloat(cursor.getColumnIndex(FIELD_MAGNITUDE))
+                        , cursor.getFloat(cursor.getColumnIndex(FIELD_LATITUDE))
+                        , cursor.getFloat(cursor.getColumnIndex(FIELD_LONGITUDE))
                 );
+                result.add(quake);
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
+
+        return result;
     }
 }
