@@ -12,9 +12,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:drawable/ic_popup_reminder"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:background="@drawable/small_icon_green"
             android:layout_margin="5dp" />
 
         <LinearLayout

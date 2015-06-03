@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +22,14 @@ import java.util.Date;
 /**
  * Url EarthQuakes: http://earthquake.usgs.gov/
  * Rss all_past_hour: http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom
+ *
+ * TODO:
+ * 1. Notifify last significant earthquakes
+ * 2. Notifify near earthquakes (defined by user)
+ * 3. Clear stored data
+ * 4. Change url (day, week, month)
+ * 5. Only download with wifi
+ * 6. Order by: magnitude, date, proximity
  */
 public class SearchActivity extends Activity {
 
@@ -55,7 +64,7 @@ public class SearchActivity extends Activity {
             dao.insert(new Quake("2", "Dos","fdf", new Date(), 5.5f,0.1f,10.1f));
             dao.insert(new Quake("3", "Tres","ffd", new Date(), 2.5f,0.1f,0.1f));
             dao.insert(new Quake("4", "Cuatro","ffa", new Date(), 3.5f,0.1f,11.1f));
-            dao.insert(new Quake("5", "Cinco","ffa", new Date(), 7.5f,10.1f,101.1f));
+            dao.insert(new Quadke("5", "Cinco","ffa", new Date(), 7.5f,10.1f,101.1f));
 
             db.setTransactionSuccessful();
         } finally {
@@ -82,6 +91,8 @@ public class SearchActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, PreferencesActivity.class);
+            startActivity(intent);
             return true;
         }else if (id == R.id.action_help) {
             Intent intent = new Intent(this, HelpActivity.class);
@@ -104,6 +115,9 @@ public class SearchActivity extends Activity {
         //Set filters
         setMagnitudeFilterListener();
         setDateFilterListener();
+
+        //SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //defaultSharedPreferences.edit().putString(getString(R.string.key_url_rss), "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom").commit();
     }
 
     private void setBtnSearchListener() {
@@ -111,7 +125,16 @@ public class SearchActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String magnitudeSelected = spinnerMagnitude.getSelectedItem().toString();
-                String dateSelected = txtDate.getText().toString();
+                String dateSelected = String.valueOf(txtDate.getText());
+                if (dateSelected != null) {
+                    try {
+                        Date date1 = new SimpleDateFormat("dd-MM-yyyy").parse(dateSelected);
+                        dateSelected = new SimpleDateFormat("yyyy-MM-dd").format(date1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
 
                 Intent intent = new Intent(SearchActivity.this, ListQuakeActivity.class);
                 intent.putExtra("magnitudeSelected", magnitudeSelected);

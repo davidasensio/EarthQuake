@@ -23,7 +23,7 @@ public class QuakeDaoImpl implements QuakeDao {
     public static final String FIELD_ID = "ID";
     public static final String FIELD_TITLE = "TITLE";
     public static final String FIELD_LINK = "LINK";
-    public static final String FIELD_DATE = "DATE";
+    public static final String FIELD_DATE = "DATE_QUAKE";
     public static final String FIELD_MAGNITUDE = "MAGNITUDE";
     public static final String FIELD_LATITUDE = "LATITUDE";
     public static final String FIELD_LONGITUDE = "LONGITUDE";
@@ -42,15 +42,16 @@ public class QuakeDaoImpl implements QuakeDao {
         String where = "";
         ArrayList whereArgs = new ArrayList();
         String[] whereArgsArray = null;
+        String orderBy = null;
 
         if (dto.getMagnitude() != null ) {
-            where = where.concat(FIELD_MAGNITUDE.concat(">=?"));
+            where = where.concat(FIELD_MAGNITUDE.concat(" >=? "));
             whereArgs.add(String.valueOf(dto.getMagnitude()));
         }
 
         if (dto.getDate() != null) {
-            where = where.concat(FIELD_DATE.concat(">=?"));
-            whereArgs.add(String.valueOf(dto.getDate()));
+            where = where.concat(" AND ").concat(FIELD_DATE.concat(" >= Datetime(?) "));
+            whereArgs.add(new SimpleDateFormat("yyyy-MM-dd").format(dto.getDate()));
         }
 
         if (whereArgs.size() > 0) {
@@ -58,7 +59,11 @@ public class QuakeDaoImpl implements QuakeDao {
             whereArgs.toArray(whereArgsArray);
         }
 
-        Cursor cursor = db.query(TABLE, null, where, whereArgsArray, null, null, null);
+        if (dto.getSort() != null) {
+            orderBy = dto.getSort() + " " + dto.getDir();
+        }
+
+        Cursor cursor = db.query(TABLE, null, where, whereArgsArray, null, null, orderBy);
 
         return cursorToListQuake(cursor);
     }

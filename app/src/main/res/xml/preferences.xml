@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="@string/key_url_rss"
+        android:title="Feed url"
+        android:summary="Rss feed url"
+        android:dialogTitle="Url"
+        android:autoLink="web"
+        android:defaultValue="http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.atom">
+
+    </EditTextPreference>
+
+    <ListPreference
+        android:key="@string/key_frequency"
+        android:title="Update frequency"
+        android:summary="The frequency to update database from feed"
+        android:dialogTitle="Frequency"
+        android:entries="@array/frequency_descriptions"
+        android:entryValues="@array/frequency_values"
+        >
+    </ListPreference>
+</PreferenceScreen>

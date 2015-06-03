@@ -11,6 +11,9 @@ public class QuakeDto implements Serializable {
     private Float magnitude;
     private Date date;
 
+    private String sort;
+    private String dir;
+
     public Float getMagnitude() {
         return magnitude;
     }
@@ -25,5 +28,21 @@ public class QuakeDto implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
     }
 }

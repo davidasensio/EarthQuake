@@ -31,6 +31,20 @@
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail" >
         </activity>
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="@string/title_activity_preferences" >
+        </activity>
+
+        <service
+            android:name=".QuakeUpdaterService"
+            android:exported="false" >
+        </service>
+
+        <activity
+            android:name=".QuakeDetailActivity"
+            android:label="@string/title_activity_quake_detail" >
+        </activity>
     </application>
 
 </manifest>

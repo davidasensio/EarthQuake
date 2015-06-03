@@ -70,10 +70,10 @@ public class QuakeSearchAsyncTask extends AsyncTask<QuakeDto, Void, List<Quake>>
         SQLiteDatabase db = helper.getWritableDatabase();
         QuakeDao dao = new QuakeDaoImpl(db);
 
-        db.beginTransaction();
-        db.execSQL("delete from quake");
-        db.setTransactionSuccessful();
-        db.endTransaction();
+        //db.beginTransaction();
+        //db.execSQL("delete from quake");
+        //db.setTransactionSuccessful();
+        //db.endTransaction();
 
         for (Quake quake : quakes) {
             db.beginTransaction();

@@ -62,11 +62,11 @@ public class QuakeAdapter extends BaseAdapter {
         txtDate.setText(new SimpleDateFormat("dd/MM HH:mm").format(quake.getDate()));
 
         if (quake.getMagnitude() >= 7) {
-            imageView.setBackground(null); //Red
+            imageView.setBackground(context.getDrawable(R.drawable.small_icon_red)); //Red
         } else if (quake.getMagnitude() >= 4.5) {
-            imageView.setBackground(null); //Yellow
+            imageView.setBackground(context.getDrawable(R.drawable.small_icon_yellow)); //Yellow
         } else {
-            imageView.setBackground(null); //Green
+            imageView.setBackground(context.getDrawable(R.drawable.small_icon_green)); //Green
         }
 
         return convertView;

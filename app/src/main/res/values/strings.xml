@@ -32,6 +32,29 @@
         <item>All Earthquakes</item>
     </array>
 
+    <!-- Magnitud Richter -->
+    <string-array name="frequency_values">
+        <item>1</item>
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>720</item>
+        <item>1440</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="frequency_descriptions">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>Never</item>
+    </string-array>
+
     <!-- RSS Feed Earthquakes URLs-->
     <string name="hour_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_hour.atom</string>
     <string name="hour_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.atom</string>
@@ -56,6 +79,18 @@
     <string name="month_2.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.atom</string>
     <string name="month_1.0" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.atom</string>
     <string name="month_all" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.atom</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
+
+    <!-- BBDD -->
+    <string name="database_name">EarthQuake.s3db</string>
+
+    <!-- Preference keys -->
+    <string name="key_url_rss">url_rss</string>
+    <string name="key_frequency">frequency</string>
+    <string name="title_activity_quake_detail">QuakeDetailActivity</string>
 
 
 </resources>

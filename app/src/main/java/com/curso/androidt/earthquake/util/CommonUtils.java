@@ -9,7 +9,8 @@ import java.util.Date;
  */
 public class CommonUtils {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat sdfDatetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Calc distance in Meters between 2 poits
@@ -38,7 +39,7 @@ public class CommonUtils {
      * @return
      */
     public static String getDateToString(Date date) {
-        return sdf.format(date);
+        return sdfDate.format(date);
     }
 
     /**
@@ -49,7 +50,32 @@ public class CommonUtils {
     public static Date getStringToDate(String date) {
         if (date != null) {
             try {
-                return sdf.parse(date);
+                return sdfDate.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return String text of a Date
+     * @param datetime
+     * @return
+     */
+    public static String getDatetimeToString(Date datetime) {
+        return sdfDatetime.format(datetime);
+    }
+
+    /**
+     * Return String text of a Date
+     * @param datetime
+     * @return
+     */
+    public static Date getStringToDatetime(String datetime) {
+        if (datetime != null) {
+            try {
+                return sdfDatetime.parse(datetime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

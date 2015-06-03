@@ -1,7 +1,9 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -111,9 +113,25 @@ public class ListQuakeActivity extends Activity {
 
         switch (id) {
             case (R.id.action_detail):
+                Intent intentDetail = new Intent(this, QuakeDetailActivity.class);
+                startActivity(intentDetail);
 
                 break;
             case R.id.action_map:
+                int position = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+                Quake quake = (Quake) listViewQuakes.getAdapter().getItem(position);
+
+                double latitude = quake.getLatitude();
+                double longitude = quake.getLongitude();
+                String label = "Earthquake";
+                String uriBegin = "geo:" + 0 + "," + 0;
+                String query =  longitude+ "," + latitude + "(" + label + ")";
+                String encodedQuery = Uri.encode(query);
+                String uriString = Uri.encode(uriBegin) + "?q=" + encodedQuery + "&z=8";
+                Uri uri = Uri.parse(uriString);
+                Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                startActivity(intentMap);
+
 
                 break;
         }
@@ -124,14 +142,17 @@ public class ListQuakeActivity extends Activity {
 
         listViewQuakes = (ListView) findViewById(R.id.listViewQuakes);
 
-        helper = new QuakeSQLiteOpenHelper(this, "EarthQuake.s3db", null, getResources().getInteger(R.integer.database_version));
+        helper = new QuakeSQLiteOpenHelper(this, getString(R.string.database_name), null, getResources().getInteger(R.integer.database_version));
         db = helper.getWritableDatabase();
         dao = new QuakeDaoImpl(db);
 
         //Filter DTO
         QuakeDto quakeDto = new QuakeDto();
+        //new QuakeSearchAsyncTask(this, listViewQuakes, new ProgressDialog(this)).execute(quakeDto); //Comment
         quakeDto.setMagnitude(Float.valueOf(magnitude));
         quakeDto.setDate(date);
+        quakeDto.setSort(QuakeDaoImpl.FIELD_DATE);
+        quakeDto.setDir("DESC");
 
         //read from BBDD
         List<Quake> listQuakes = dao.find(quakeDto);

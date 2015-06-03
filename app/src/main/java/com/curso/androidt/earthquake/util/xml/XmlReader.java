@@ -1,6 +1,7 @@
 package com.curso.androidt.earthquake.util.xml;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.net.URL;
  * Created by androidt on 15/05/2015.
  */
 public class XmlReader implements Serializable {
+    private final static String LOG_TAG = XmlReader.class.getSimpleName();
     private final static int CONNECTION_AND_READ_TIMEOUT = 10000;
 
     public static InputStream getFeedInputStreamFromAssets(Context context, String fileName) {
@@ -26,6 +28,7 @@ public class XmlReader implements Serializable {
 
     public static InputStream getFeedInputStreamFromUrl(String urlStr) {
         InputStream is = null;
+        Log.d(LOG_TAG, "Trying to read from url: " + urlStr);
         try {
             URL url = new URL(urlStr);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
