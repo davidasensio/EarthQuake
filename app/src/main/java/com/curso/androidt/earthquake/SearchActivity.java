@@ -29,7 +29,9 @@ import java.util.Date;
  * 3. Clear stored data
  * 4. Change url (day, week, month)
  * 5. Only download with wifi
- * 6. Order by: magnitude, date, proximity
+ * OK - 6. Order by: magnitude, date, proximity
+ * 7. - Row layout show distance km and --> || <-- || ^ || v
+ *
  */
 public class SearchActivity extends Activity {
 
@@ -162,6 +164,10 @@ public class SearchActivity extends Activity {
                 datePickerDialogFragment.show(getFragmentManager(), "datePicker");
             }
         });
+
+        //Set default value: today
+        Calendar now = Calendar.getInstance();
+        setTxtDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
     }
 
     public void setTxtDate(int year, int monthOfYear, int dayOfMonth) {
@@ -175,6 +181,7 @@ public class SearchActivity extends Activity {
 
 
     private void setMagnitudeFilterListener() {
+
         spinnerMagnitude.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -188,6 +195,11 @@ public class SearchActivity extends Activity {
 
             }
         });
+
+        //Default value: 4.5+
+        spinnerMagnitude.setSelection(1);
+
+
     }
 
 }

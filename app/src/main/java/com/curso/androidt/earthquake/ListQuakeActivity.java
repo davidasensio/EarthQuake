@@ -1,6 +1,8 @@
 package com.curso.androidt.earthquake;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -86,12 +89,15 @@ public class ListQuakeActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_order) {
+            selectOrder();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     //Context menu
     @Override
@@ -124,10 +130,10 @@ public class ListQuakeActivity extends Activity {
                 double latitude = quake.getLatitude();
                 double longitude = quake.getLongitude();
                 String label = "Earthquake";
-                String uriBegin = "geo:" + 0 + "," + 0;
+                String uriBegin = "geo:" + longitude + "," + latitude;
                 String query =  longitude+ "," + latitude + "(" + label + ")";
                 String encodedQuery = Uri.encode(query);
-                String uriString = Uri.encode(uriBegin) + "?q=" + encodedQuery + "&z=8";
+                String uriString = uriBegin + "?q=" + encodedQuery + "&z=15";
                 Uri uri = Uri.parse(uriString);
                 Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
                 startActivity(intentMap);
@@ -146,22 +152,28 @@ public class ListQuakeActivity extends Activity {
         db = helper.getWritableDatabase();
         dao = new QuakeDaoImpl(db);
 
+        doSearch(null); //Default search
+
+        //Register context menu
+        registerForContextMenu(listViewQuakes);
+
+    }
+
+    private void doSearch(QuakeDto quakeDto) {
         //Filter DTO
-        QuakeDto quakeDto = new QuakeDto();
-        //new QuakeSearchAsyncTask(this, listViewQuakes, new ProgressDialog(this)).execute(quakeDto); //Comment
-        quakeDto.setMagnitude(Float.valueOf(magnitude));
-        quakeDto.setDate(date);
-        quakeDto.setSort(QuakeDaoImpl.FIELD_DATE);
-        quakeDto.setDir("DESC");
+        if (quakeDto == null) {
+            quakeDto = new QuakeDto();
+            //new QuakeSearchAsyncTask(this, listViewQuakes, new ProgressDialog(this)).execute(quakeDto); //Comment
+            quakeDto.setMagnitude(Float.valueOf(magnitude));
+            quakeDto.setDate(date);
+            quakeDto.setSort(QuakeDaoImpl.FIELD_DATE);
+            quakeDto.setDir("DESC");
+        }
 
         //read from BBDD
         List<Quake> listQuakes = dao.find(quakeDto);
 
         setQuakeAdapter(listQuakes);
-
-        //Register context menu
-        registerForContextMenu(listViewQuakes);
-
     }
 
     /*
@@ -199,6 +211,48 @@ public class ListQuakeActivity extends Activity {
         List<Quake> listQuakes = xmlQuakeParser.parse(is);
         Log.w(LOG_TAG, listQuakes.toString());
         return listQuakes;
+    }
+
+    private void selectOrder() {
+        final ArrayAdapter<String> orderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.order_entries));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(android.R.drawable.arrow_down_float)
+                .setTitle("Select order")
+                .setAdapter(orderAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String item = orderAdapter.getItem(which);
+                        reorder(item);
+                    }
+                });
+
+        builder.show();
+
+    }
+
+    private void reorder(String item) {
+        Log.d(LOG_TAG, "Item selected: " + item);
+
+        QuakeDto quakeDto = new QuakeDto();
+        quakeDto.setMagnitude(Float.valueOf(magnitude));
+        quakeDto.setDate(date);
+
+        if (item.contains("DESC")) {
+            quakeDto.setDir("DESC");
+        }else {
+            quakeDto.setDir("ASC");
+        }
+
+        if (item.toUpperCase().contains("DATE")) {
+            quakeDto.setSort(QuakeDaoImpl.FIELD_DATE);
+        } else if (item.toUpperCase().contains("MAGNITUDE")) {
+            quakeDto.setSort(QuakeDaoImpl.FIELD_MAGNITUDE);
+        }else if (item.toUpperCase().contains("PROXIMITY")) {
+            quakeDto.setSort(QuakeDaoImpl.FIELD_PROXIMITY);
+        }
+
+        doSearch(quakeDto);
     }
 
 }

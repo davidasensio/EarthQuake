@@ -6,10 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.curso.androidt.earthquake.Quake;
 import com.curso.androidt.earthquake.QuakeDto;
+import com.curso.androidt.earthquake.util.CommonUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +31,7 @@ public class QuakeDaoImpl implements QuakeDao {
     public static final String FIELD_LATITUDE = "LATITUDE";
     public static final String FIELD_LONGITUDE = "LONGITUDE";
     public static final String FIELD_ELEVATION = "ELEVATION";
+    public static final String FIELD_PROXIMITY = "PROXIMITY";
 
     private SQLiteDatabase db;
     private SimpleDateFormat sdf;
@@ -59,13 +63,52 @@ public class QuakeDaoImpl implements QuakeDao {
             whereArgs.toArray(whereArgsArray);
         }
 
-        if (dto.getSort() != null) {
+        if (dto.getSort() != null && !dto.getSort().equals(FIELD_PROXIMITY)) {
             orderBy = dto.getSort() + " " + dto.getDir();
         }
 
         Cursor cursor = db.query(TABLE, null, where, whereArgsArray, null, null, orderBy);
 
-        return cursorToListQuake(cursor);
+        List<Quake> result = cursorToListQuake(cursor);
+
+        if (dto.getSort() != null && dto.getSort().equals(FIELD_PROXIMITY)) {
+            result = orderByProxymity(result, dto.getDir());
+        }
+
+        return result;
+    }
+
+    private List<Quake> orderByProxymity(List<Quake> listQuakes, final String direction) {
+        double lat1 = 39.4623656f;
+        double long1 = -0.3659583f;
+
+        for (Quake quake : listQuakes) {
+
+            double lat2 = quake.getLatitude();
+            double long2 = quake.getLongitude();
+            Double distanceInMeters = CommonUtils.getDistanceInMeters(lat1, long1, lat2, long2);
+            quake.setProximity(distanceInMeters.floatValue());
+        }
+
+        Collections.sort(listQuakes, new Comparator<Quake>() {
+            @Override
+            public int compare(Quake lhs, Quake rhs) {
+                int result = 0;
+                if (lhs.getProximity() > rhs.getProximity()) {
+                    result = 1;
+                }else if (lhs.getProximity() < rhs.getProximity()) {
+                    result = -1;
+                } else {
+                    result = 0;
+                }
+                if (direction.equals("DESC")) {
+                    result = result * -1;
+                }
+                return result;
+            }
+        });
+
+        return listQuakes;
     }
 
     @Override

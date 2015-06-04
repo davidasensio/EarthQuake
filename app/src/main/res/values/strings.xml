@@ -55,6 +55,24 @@
         <item>Never</item>
     </string-array>
 
+    <string-array name="order_values">
+        <item>DATE_QUAKE</item>
+        <item>DATE_QUAKE_DESC</item>
+        <item>MAGNITUDE</item>
+        <item>MAGNITUDE_DESC</item>
+        <item>PROXIMITY</item>
+        <item>PROXIMITY_DESC</item>
+    </string-array>
+
+    <string-array name="order_entries">
+        <item>Date (ASC)</item>
+        <item>Date (DESC)</item>
+        <item>Magnitude (ASC)</item>
+        <item>Magnitude (DESC)</item>
+        <item>Proximity (ASC)</item>
+        <item>Proximity (DESC)</item>
+    </string-array>
+
     <!-- RSS Feed Earthquakes URLs-->
     <string name="hour_significant" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_hour.atom</string>
     <string name="hour_4.5" translatable="false">http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.atom</string>
@@ -91,6 +109,7 @@
     <string name="key_url_rss">url_rss</string>
     <string name="key_frequency">frequency</string>
     <string name="title_activity_quake_detail">QuakeDetailActivity</string>
+    <string name="action_order">Order by...</string>
 
 
 </resources>
