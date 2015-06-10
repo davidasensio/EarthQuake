@@ -26,11 +26,13 @@ import java.util.Date;
  * TODO:
  * 1. Notifify last significant earthquakes
  * 2. Notifify near earthquakes (defined by user)
- * 3. Clear stored data
- * 4. Change url (day, week, month)
- * 5. Only download with wifi
+ * 3. Show earthquake direction
+ * 3. Change url (day, week, month)
+ * OK - 4. Clear stored data
+ * OK - 5. Only update earthquakes if wifi is connected (Preference)
  * OK - 6. Order by: magnitude, date, proximity
- * 7. - Row layout show distance km and --> || <-- || ^ || v
+ * OK - 7. Row layout show distance km and --> || <-- || ^ || v
+ * OK - 8. Get Location
  *
  */
 public class SearchActivity extends Activity {

@@ -7,7 +7,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.curso.androidt.earthquake.dao.QuakeDao;
 import com.curso.androidt.earthquake.dao.QuakeDaoImpl;
@@ -24,6 +27,7 @@ import java.util.List;
  * helper methods.
  */
 public class QuakeUpdaterService extends IntentService {
+    private final static String LOG_TAG = QuakeUpdaterService.class.getSimpleName();
     private static final int QUAKE_NOTIFICATION_ID = 1;
 
     private QuakeSQLiteOpenHelper quakeSQLiteOpenHelper = null;
@@ -43,6 +47,17 @@ public class QuakeUpdaterService extends IntentService {
         String urlRss = defaultSharedPreferences.getString(getString(R.string.key_url_rss), getResources().getString(R.string.hour_all));
         String frequencyStr =  defaultSharedPreferences.getString(getString(R.string.key_frequency), "0");
         Long frequency = Long.valueOf(frequencyStr);
+        boolean checkIfWifiConnected = defaultSharedPreferences.getBoolean(getString(R.string.key_chk_wifi), false);
+
+        //If WIFI check selected --> if wifi is disconnected return
+        if (checkIfWifiConnected) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (networkInfo != null && !networkInfo.isConnected()) {
+                Log.d(LOG_TAG, "Skip earthquakes update from rss cause WIFI is not connected");
+                return;
+            }
+        }
 
         //Notification
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -110,7 +125,7 @@ public class QuakeUpdaterService extends IntentService {
         }catch (Exception e) {
             db = quakeSQLiteOpenHelper.getReadableDatabase();
         }
-        quakeDao = new QuakeDaoImpl(db);
+        quakeDao = new QuakeDaoImpl(this, db);
     }
 
     private void persistQuake(Quake quake) {

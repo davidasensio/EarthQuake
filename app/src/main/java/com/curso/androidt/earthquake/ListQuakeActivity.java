@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -16,10 +15,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.curso.androidt.earthquake.dao.QuakeDao;
 import com.curso.androidt.earthquake.dao.QuakeDaoImpl;
 import com.curso.androidt.earthquake.util.CommonUtils;
+import com.curso.androidt.earthquake.util.QuakeUtil;
 import com.curso.androidt.earthquake.util.xml.XmlReader;
 
 import java.io.InputStream;
@@ -92,6 +93,9 @@ public class ListQuakeActivity extends Activity {
         if (id == R.id.action_order) {
             selectOrder();
             return true;
+        } else if (id == R.id.action_clear_data) {
+            clearData();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -117,28 +121,19 @@ public class ListQuakeActivity extends Activity {
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        int position = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+        Quake quake = (Quake) listViewQuakes.getAdapter().getItem(position);
+
         switch (id) {
             case (R.id.action_detail):
+
                 Intent intentDetail = new Intent(this, QuakeDetailActivity.class);
+                intentDetail.putExtra("quake", quake);
                 startActivity(intentDetail);
 
                 break;
             case R.id.action_map:
-                int position = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-                Quake quake = (Quake) listViewQuakes.getAdapter().getItem(position);
-
-                double latitude = quake.getLatitude();
-                double longitude = quake.getLongitude();
-                String label = "Earthquake";
-                String uriBegin = "geo:" + longitude + "," + latitude;
-                String query =  longitude+ "," + latitude + "(" + label + ")";
-                String encodedQuery = Uri.encode(query);
-                String uriString = uriBegin + "?q=" + encodedQuery + "&z=15";
-                Uri uri = Uri.parse(uriString);
-                Intent intentMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
-                startActivity(intentMap);
-
-
+                QuakeUtil.showOnMap(this, quake);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -150,7 +145,7 @@ public class ListQuakeActivity extends Activity {
 
         helper = new QuakeSQLiteOpenHelper(this, getString(R.string.database_name), null, getResources().getInteger(R.integer.database_version));
         db = helper.getWritableDatabase();
-        dao = new QuakeDaoImpl(db);
+        dao = new QuakeDaoImpl(this, db);
 
         doSearch(null); //Default search
 
@@ -175,6 +170,10 @@ public class ListQuakeActivity extends Activity {
 
         setQuakeAdapter(listQuakes);
     }
+
+
+
+
 
     /*
     private void old_init() {
@@ -224,6 +223,33 @@ public class ListQuakeActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         String item = orderAdapter.getItem(which);
                         reorder(item);
+                    }
+                });
+
+        builder.show();
+
+    }
+
+    private void clearData() {
+        final AlertDialog.Builder builder =new AlertDialog.Builder(this);
+        builder
+                .setIcon(android.R.drawable.ic_menu_help)
+                .setTitle("Confirmation")
+                .setMessage("Are you sure, you want clear all earthquake stored data?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dao.deleteAll();
+                        doSearch(null);
+                        Toast.makeText(ListQuakeActivity.this, "All earthquake stored data cleared", Toast.LENGTH_LONG).show();
+                        Log.d(LOG_TAG, "All earthquake stored data cleared");
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(LOG_TAG, "Canceled earthquake data clear");;
                     }
                 });
 

@@ -16,19 +16,20 @@ public class Quake implements Serializable {
     private Float longitude;
     private Float latitude;
     private Float elevation;
-    private Float proximity;
+    private Float proximity; //Km
+    private Integer bearingAngle; //Degrees
 
     public Quake() {
     }
 
-    public Quake(String id, String title, String link, Date date, Float magnitude, Float longitude, Float latitude) {
+    public Quake(String id, String title, String link, Date date, Float magnitude, Float latitude, Float longitude) {
         this.id = id;
         this.title = title;
         this.link = link;
         this.magnitude = magnitude;
         this.date = date;
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     //Getters & Setters
@@ -106,9 +107,17 @@ public class Quake implements Serializable {
         this.proximity = proximity;
     }
 
+    public Integer getBearingAngle() {
+        return bearingAngle;
+    }
+
+    public void setBearingAngle(Integer bearingAngle) {
+        this.bearingAngle = bearingAngle;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        return result.append("M ".concat(String.valueOf(magnitude))).append(" - ").append(title).append(" - ").append(String.valueOf(magnitude)).append(" - ").append(link).toString();
+        return result.append("M ".concat(String.valueOf(magnitude))).append(" - ").append(title).append(" - ").append(String.valueOf(magnitude)).append(" - ").append(String.format("[%.6f, %.6f]",latitude, longitude)).append(" - ").append(link).toString();
     }
 }

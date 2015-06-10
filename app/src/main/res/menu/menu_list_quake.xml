@@ -4,4 +4,6 @@
 
     <item android:id="@+id/action_order" android:title="@string/action_order"
         android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_clear_data" android:title="@string/action_clear_data"
+        android:orderInCategory="200" android:showAsAction="never" />
 </menu>

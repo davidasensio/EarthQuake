@@ -19,4 +19,11 @@
         android:entryValues="@array/frequency_values"
         >
     </ListPreference>
+
+    <CheckBoxPreference
+        android:key="@string/key_chk_wifi"
+        android:title="Syncronize only if WIFI is connected"
+        android:summary="Only check for updates if WIFI is connected"
+        android:defaultValue="true"
+        ></CheckBoxPreference>
 </PreferenceScreen>

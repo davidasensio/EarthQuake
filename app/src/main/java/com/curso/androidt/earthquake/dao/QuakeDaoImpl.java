@@ -1,8 +1,10 @@
 package com.curso.androidt.earthquake.dao;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 
 import com.curso.androidt.earthquake.Quake;
 import com.curso.androidt.earthquake.QuakeDto;
@@ -33,10 +35,12 @@ public class QuakeDaoImpl implements QuakeDao {
     public static final String FIELD_ELEVATION = "ELEVATION";
     public static final String FIELD_PROXIMITY = "PROXIMITY";
 
+    private Context context;
     private SQLiteDatabase db;
     private SimpleDateFormat sdf;
 
-    public QuakeDaoImpl(SQLiteDatabase db) {
+    public QuakeDaoImpl(Context context, SQLiteDatabase db) {
+        this.context = context;
         this.db = db;
         this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
@@ -71,39 +75,54 @@ public class QuakeDaoImpl implements QuakeDao {
 
         List<Quake> result = cursorToListQuake(cursor);
 
+        //Add proximity and bearing info
+        setCalculatedProximity(result);
+
         if (dto.getSort() != null && dto.getSort().equals(FIELD_PROXIMITY)) {
             result = orderByProxymity(result, dto.getDir());
         }
 
+
         return result;
     }
 
-    private List<Quake> orderByProxymity(List<Quake> listQuakes, final String direction) {
-        double lat1 = 39.4623656f;
-        double long1 = -0.3659583f;
+    private void setCalculatedProximity(List<Quake> listQuakes) {
+        Location currentLocation = CommonUtils.getCurrentLocation(this.context);
+        double lat1 = currentLocation.getLatitude();
+        double long1 = currentLocation.getLongitude();
 
         for (Quake quake : listQuakes) {
 
             double lat2 = quake.getLatitude();
             double long2 = quake.getLongitude();
-            Double distanceInMeters = CommonUtils.getDistanceInMeters(lat1, long1, lat2, long2);
-            quake.setProximity(distanceInMeters.floatValue());
+            Double distanceInKm = CommonUtils.getDistanceInKm(lat1, long1, lat2, long2);
+            Integer bearingAngle = CommonUtils.getDegreesBetweenTwoPoints(lat1, long1, lat2, long2);
+            quake.setProximity(distanceInKm.floatValue());
+            quake.setBearingAngle(bearingAngle);
         }
+    }
+
+    private List<Quake> orderByProxymity(List<Quake> listQuakes, final String direction) {
+        Location currentLocation = CommonUtils.getCurrentLocation(this.context);
+        double lat1 = currentLocation.getLatitude(); //39.4623656f;
+        double long1 = currentLocation.getLongitude(); //-0.3659583f;
 
         Collections.sort(listQuakes, new Comparator<Quake>() {
             @Override
             public int compare(Quake lhs, Quake rhs) {
                 int result = 0;
-                if (lhs.getProximity() > rhs.getProximity()) {
-                    result = 1;
-                }else if (lhs.getProximity() < rhs.getProximity()) {
-                    result = -1;
-                } else {
-                    result = 0;
-                }
-                if (direction.equals("DESC")) {
-                    result = result * -1;
-                }
+                //if (lhs.getProximity() != null && rhs.getProximity() !=null) {
+                    if (lhs.getProximity() > rhs.getProximity()) {
+                        result = 1;
+                    } else if (lhs.getProximity() < rhs.getProximity()) {
+                        result = -1;
+                    } else {
+                        result = 0;
+                    }
+                    if (direction.equals("DESC")) {
+                        result = result * -1;
+                    }
+                //}
                 return result;
             }
         });
@@ -130,7 +149,12 @@ public class QuakeDaoImpl implements QuakeDao {
     @Override
     public List<Quake> findAll() {
         Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        return cursorToListQuake(cursor);
+        List<Quake> result = cursorToListQuake(cursor);
+
+        //Add proximity and bearing info
+        setCalculatedProximity(result);
+
+        return result;
     }
 
     @Override
@@ -155,7 +179,11 @@ public class QuakeDaoImpl implements QuakeDao {
         String where = FIELD_ID.concat("=?");
         String[] whereArgs = new String[] {id};
         db.delete(TABLE, where, whereArgs);
+    }
 
+    @Override
+    public void deleteAll() {
+        db.delete(TABLE, null,null);
     }
 
     private ContentValues quakeToContentValues(Quake entity) {

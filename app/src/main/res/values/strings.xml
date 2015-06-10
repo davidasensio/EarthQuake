@@ -110,6 +110,8 @@
     <string name="key_frequency">frequency</string>
     <string name="title_activity_quake_detail">QuakeDetailActivity</string>
     <string name="action_order">Order by...</string>
+    <string name="action_clear_data">Clear stored data</string>
+    <string name="key_chk_wifi">chkWifiRequired</string>
 
 
 </resources>

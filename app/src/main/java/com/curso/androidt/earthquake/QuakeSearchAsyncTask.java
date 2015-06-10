@@ -68,7 +68,7 @@ public class QuakeSearchAsyncTask extends AsyncTask<QuakeDto, Void, List<Quake>>
     private void persistQuakes(List<Quake> quakes) {
         QuakeSQLiteOpenHelper helper = new QuakeSQLiteOpenHelper(context, "EarthQuake.s3db", null, context.getResources().getInteger(R.integer.database_version));
         SQLiteDatabase db = helper.getWritableDatabase();
-        QuakeDao dao = new QuakeDaoImpl(db);
+        QuakeDao dao = new QuakeDaoImpl(context, db);
 
         //db.beginTransaction();
         //db.execSQL("delete from quake");

@@ -15,12 +15,16 @@
             android:layout_width="29dp"
             android:layout_height="29dp"
             android:background="@drawable/small_icon_green"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:layout_weight="0"
+            />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
 
 
 
@@ -72,6 +76,14 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewIconDirection"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0"
+            />
 
     </LinearLayout>
 

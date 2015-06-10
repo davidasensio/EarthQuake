@@ -38,7 +38,7 @@ public class QuakePreferenceChangeListener implements SharedPreferences.OnShared
 
         if (key.equals(context.getResources().getString(R.string.key_frequency))) {
             String value = sharedPreferences.getString(context.getResources().getString(R.string.key_frequency), "0");
-            Log.d(LOG_TAG, "Frequency changed to: " + value);
+            Log.d(LOG_TAG, "Frequency preference changed to: " + value);
 
             Long frequencyValue = Long.valueOf(value);
 
@@ -48,8 +48,13 @@ public class QuakePreferenceChangeListener implements SharedPreferences.OnShared
             //Program updates
             if (frequencyValue != 0) {
                 alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, 0, frequencyValue * 60 * 1000, pendingIntent);
-                Log.w(LOG_TAG, "Service setted in " + frequencyValue + " minute(s)");
+                Log.w(LOG_TAG, "Update Service preference setted in " + frequencyValue + " minute(s)");
             }
+        }
+
+        if (key.equals(context.getResources().getString(R.string.key_chk_wifi))) {
+            //No action is needed
+            Log.d(LOG_TAG, "Check WIFI preference changed to: " + sharedPreferences.getBoolean(key, false));
         }
     }
 }

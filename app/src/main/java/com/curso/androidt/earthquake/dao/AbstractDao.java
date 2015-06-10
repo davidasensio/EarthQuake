@@ -12,4 +12,5 @@ public interface AbstractDao<K,V> {
     void insert(K entity);
     K update(K entity);
     void delete(V id);
+    void deleteAll();
 }
